@@ -99,19 +99,35 @@ def extract_title(soup: BeautifulSoup) -> str | None:
 
 
 def extract_article_body(soup: BeautifulSoup, min_chars: int = 100) -> str:
+    bodies: list[str] = []
+    seen: set[str] = set()
     for selector in ARTICLE_BODY_SELECTORS:
-        container = soup.select_one(selector)
-        if not container:
-            continue
-        paragraphs = []
-        for paragraph in container.find_all("p", recursive=True):
-            text = clean_article_text(paragraph.get_text(" ", strip=True))
-            if text and not _is_noise(text):
-                paragraphs.append(text)
-        body = clean_article_text("\n".join(paragraphs))
-        if len(body) >= min_chars:
-            return body
-    return ""
+        for container in soup.select(selector):
+            paragraphs = _extract_paragraphs(container)
+            if not paragraphs:
+                continue
+            body = clean_article_text("\n".join(paragraphs))
+            if body and body not in seen:
+                seen.add(body)
+                bodies.append(body)
+    if not bodies:
+        return ""
+
+    full_body = clean_article_text("\n".join(bodies))
+    if len(full_body) >= min_chars:
+        return full_body
+
+    return max(bodies, key=len)
+
+
+def _extract_paragraphs(container: BeautifulSoup) -> list[str]:
+    paragraphs: list[str] = []
+    for paragraph in container.find_all("p", recursive=True):
+        text = clean_article_text(paragraph.get_text(" ", strip=True))
+        if text and not _is_noise(text):
+            paragraphs.append(text)
+    return paragraphs
+
 
 
 

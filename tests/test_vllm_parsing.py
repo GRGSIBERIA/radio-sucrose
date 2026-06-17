@@ -37,3 +37,59 @@ def test_invalid_vllm_content_falls_back_to_valid_segment() -> None:
 
     assert segment.segment_type == "news"
     assert segment.chunks[0].display_text
+
+
+
+def test_parsed_json_with_empty_chunks_falls_back_to_valid_segment() -> None:
+    raw = parse_script_json('{"segment_type":"news","chunks":[]}')
+    assert raw == {"segment_type": "news", "chunks": []}
+
+    from radio_sucrose.clients.vllm import fallback_segment_payload
+
+    segment = normalize_segment(fallback_segment_payload({"task_type": "news_segment", "news": {"title": "空チャンク"}}, "{}"))
+    assert segment.chunks
+
+
+class _FakeMessage:
+    content = '{"segment_type":"news","chunks":[]}'
+
+
+class _FakeChoice:
+    message = _FakeMessage()
+
+
+class _FakeCompletions:
+    def create(self, **kwargs):
+        return type("Response", (), {"choices": [_FakeChoice()]})()
+
+
+class _FakeChat:
+    completions = _FakeCompletions()
+
+
+class _FakeOpenAIClient:
+    chat = _FakeChat()
+
+
+class _FakePromptBuilder:
+    def build_messages(self, payload):
+        return [
+            {"role": "system", "content": "system"},
+            {"role": "user", "content": str(payload)},
+        ]
+
+
+def test_vllm_client_generate_segment_falls_back_when_chunks_are_empty() -> None:
+    from radio_sucrose.clients.vllm import VLLMScriptClient
+
+    client = VLLMScriptClient.__new__(VLLMScriptClient)
+    client.client = _FakeOpenAIClient()
+    client.prompt_builder = _FakePromptBuilder()
+    client.config = type("Config", (), {"vllm_model": "fake"})()
+
+    segment = client.generate_segment({"task_type": "news_segment", "news": {"title": "空チャンク"}})
+
+    assert segment.segment_type == "news"
+    assert segment.chunks
+    assert "空チャンク" in segment.chunks[0].display_text
+

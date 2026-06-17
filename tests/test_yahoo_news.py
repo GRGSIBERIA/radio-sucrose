@@ -40,6 +40,7 @@ def test_extract_title_and_body_from_yahoo_article() -> None:
     assert "これは第三段落です" in body
     assert "\n" in body
 
+
 def test_extract_article_body_removes_yahoo_javascript_warning() -> None:
     soup = BeautifulSoup(
         """
@@ -56,3 +57,27 @@ def test_extract_article_body_removes_yahoo_javascript_warning() -> None:
 
     assert "JavaScript" not in body
     assert body == "本文の第一段落です。"
+
+
+
+def test_extract_article_body_joins_split_paragraph_containers() -> None:
+    soup = BeautifulSoup(
+        """
+        <div id="uamods">
+          <div><div><p>画像キャプションです。</p></div></div>
+          <div><div>
+            <p>本文の第一段落です。</p>
+            <p>本文の第二段落です。</p>
+          </div></div>
+        </div>
+        """,
+        "html.parser",
+    )
+
+    body = extract_article_body(soup, min_chars=1)
+
+    assert "画像キャプションです。" in body
+    assert "本文の第一段落です。" in body
+    assert "本文の第二段落です。" in body
+    assert body.index("画像キャプションです。") < body.index("本文の第一段落です。")
+

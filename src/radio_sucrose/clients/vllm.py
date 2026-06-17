@@ -29,7 +29,11 @@ class VLLMScriptClient:
         raw = parse_script_json(content)
         if raw is None:
             raw = fallback_segment_payload(payload, content)
-        return normalize_segment(raw)
+
+        try:
+            return normalize_segment(raw)
+        except ValueError:
+            return normalize_segment(fallback_segment_payload(payload, content))
 
     def warmup(self) -> None:
         self.client.chat.completions.create(
