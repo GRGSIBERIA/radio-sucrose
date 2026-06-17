@@ -92,7 +92,6 @@ class IrodoriTTSClient:
             return {}
         return {"Authorization": f"Bearer {self.config.irodori_api_key}"}
 
-
 def _write_silent_wav(path: Path, duration_seconds: float = 0.15, sample_rate: int = 16000) -> None:
     frames = int(duration_seconds * sample_rate)
     with wave.open(str(path), "wb") as wav:

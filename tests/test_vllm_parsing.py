@@ -91,3 +91,4 @@ def test_vllm_client_generate_segment_falls_back_when_chunks_are_empty() -> None
     assert segment.segment_type == "news"
     assert segment.chunks
     assert "空チャンク" in segment.chunks[0].display_text
+

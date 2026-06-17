@@ -35,6 +35,7 @@ class OBSMessageBox:
         if self.config.dry_run:
             print(f"[OBS:{self.config.obs_message_source}] {text}")
             return
+
         if self._disabled:
             return
         if self._client is None and not self.connect():

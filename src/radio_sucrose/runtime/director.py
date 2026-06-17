@@ -3,7 +3,9 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from radio_sucrose.models import NewsArticle, SuperChatMessage
+
 from radio_sucrose.text import clean_article_text
+
 from radio_sucrose.storage.sqlite import SQLiteRepository
 
 
