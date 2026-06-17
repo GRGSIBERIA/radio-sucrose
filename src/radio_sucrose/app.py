@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 
 from radio_sucrose.config import AppConfig
+
 from radio_sucrose.runtime.loop import build_radio_loop
 
 

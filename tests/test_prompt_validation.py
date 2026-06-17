@@ -50,3 +50,15 @@ def test_normalize_segment_repairs_missing_emoji_and_uses_display_text() -> None
 
     assert segment.chunks[0].tts_text.startswith("📖")
     assert segment.chunks[0].display_text == "ニュースです。"
+
+
+def test_package_cli_help_imports_without_runtime_dependencies(capsys) -> None:
+    import pytest
+
+    from radio_sucrose.app import main
+
+    with pytest.raises(SystemExit) as exc_info:
+        main(["--help"])
+
+    assert exc_info.value.code == 0
+    assert "Run radio-sucrose live loop" in capsys.readouterr().out
