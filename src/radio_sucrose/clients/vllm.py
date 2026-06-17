@@ -140,3 +140,4 @@ def _extract_first_balanced_json_object(content: str) -> str | None:
             if depth == 0:
                 return content[start : index + 1]
     return None
+

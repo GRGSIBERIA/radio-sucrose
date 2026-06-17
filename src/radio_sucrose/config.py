@@ -21,6 +21,7 @@ class AppConfig:
     dry_run_superchat_message: str = ""
     dry_run_superchat_author: str = "テストリスナー"
     dry_run_superchat_amount: str = "￥500"
+
     irodori_base_url: str = "http://localhost:8088/v1"
     irodori_api_key: str = "not-used"
     irodori_model: str = "irodori-tts"
