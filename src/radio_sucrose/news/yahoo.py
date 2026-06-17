@@ -130,6 +130,7 @@ def _extract_paragraphs(container: BeautifulSoup) -> list[str]:
 
 
 
+
 class YahooNewsFetcher:
     def __init__(self, http: HTTPClient | None = None) -> None:
         self.http = http or HTTPClient.create()

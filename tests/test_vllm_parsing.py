@@ -39,6 +39,7 @@ def test_invalid_vllm_content_falls_back_to_valid_segment() -> None:
     assert segment.chunks[0].display_text
 
 
+
 def test_parsed_json_with_empty_chunks_falls_back_to_valid_segment() -> None:
     raw = parse_script_json('{"segment_type":"news","chunks":[]}')
     assert raw == {"segment_type": "news", "chunks": []}
@@ -91,3 +92,4 @@ def test_vllm_client_generate_segment_falls_back_when_chunks_are_empty() -> None
     assert segment.segment_type == "news"
     assert segment.chunks
     assert "空チャンク" in segment.chunks[0].display_text
+

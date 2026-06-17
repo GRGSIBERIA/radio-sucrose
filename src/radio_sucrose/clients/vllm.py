@@ -29,6 +29,7 @@ class VLLMScriptClient:
         raw = parse_script_json(content)
         if raw is None:
             raw = fallback_segment_payload(payload, content)
+
         try:
             return normalize_segment(raw)
         except ValueError:
@@ -143,3 +144,4 @@ def _extract_first_balanced_json_object(content: str) -> str | None:
             if depth == 0:
                 return content[start : index + 1]
     return None
+

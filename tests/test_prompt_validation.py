@@ -63,7 +63,6 @@ def test_package_cli_help_imports_without_runtime_dependencies(capsys) -> None:
     assert exc_info.value.code == 0
     assert "Run radio-sucrose live loop" in capsys.readouterr().out
 
-
 def test_clean_article_text_removes_yahoo_javascript_warning() -> None:
     from radio_sucrose.text import clean_article_text, truncate_by_paragraphs
 
