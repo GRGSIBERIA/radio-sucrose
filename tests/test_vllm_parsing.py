@@ -92,3 +92,20 @@ def test_vllm_client_generate_segment_falls_back_when_chunks_are_empty() -> None
     assert segment.chunks
     assert "空チャンク" in segment.chunks[0].display_text
 
+
+def test_news_fallback_uses_partial_article_body() -> None:
+    raw = fallback_segment_payload(
+        {
+            "task_type": "news_segment",
+            "news": {
+                "title": "途中本文ニュース",
+                "body": "第一段落です。\n第二段落も取得できています。",
+            },
+        },
+        "",
+    )
+
+    segment = normalize_segment(raw)
+
+    assert any("第一段落です" in chunk.display_text for chunk in segment.chunks)
+    assert any("第二段落も取得" in chunk.display_text for chunk in segment.chunks)

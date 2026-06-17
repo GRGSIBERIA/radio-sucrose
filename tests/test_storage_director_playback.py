@@ -89,3 +89,27 @@ def test_director_sends_full_cleaned_article_body_to_vllm() -> None:
     assert payload["news"]["body"] == body
     assert payload["news"]["body_excerpt"] == body
     assert len(payload["news"]["body_excerpt"]) > 1800
+
+
+def test_segment_player_logs_spoken_display_text(capsys, tmp_path) -> None:
+    from radio_sucrose.clients.obs import OBSMessageBox
+    from radio_sucrose.clients.tts import IrodoriTTSClient
+    from radio_sucrose.config import AppConfig
+    from radio_sucrose.models import Segment
+    from radio_sucrose.runtime.playback import AudioPlayer, SegmentPlayer
+
+    config = AppConfig(dry_run=True, log_spoken_text=True)
+    player = SegmentPlayer(
+        tts=IrodoriTTSClient(config, output_dir=str(tmp_path)),
+        obs=OBSMessageBox(config),
+        audio=AudioPlayer(config),
+    )
+    segment = Segment(
+        segment_type="news",
+        chunks=[TTSChunk(speaker="A", speaker_name="スクロース", tts_text="📖こんにちは。", display_text="こんにちは。")],
+    )
+
+    player.play_segment(segment)
+
+    assert "[SCRIPT] スクロース: こんにちは。" in capsys.readouterr().out
+

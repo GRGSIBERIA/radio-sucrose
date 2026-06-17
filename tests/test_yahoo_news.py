@@ -79,4 +79,3 @@ def test_extract_article_body_joins_split_paragraph_containers() -> None:
     assert "本文の第一段落です。" in body
     assert "本文の第二段落です。" in body
     assert body.index("画像キャプションです。") < body.index("本文の第一段落です。")
-

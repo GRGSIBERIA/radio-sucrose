@@ -15,7 +15,9 @@ class IrodoriTTSClient:
         self.config = config
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        if session is None:
+
+        if session is None and not config.dry_run:
+
             import requests
 
             session = requests.Session()

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from radio_sucrose.config import AppConfig
+import socket
 
+from radio_sucrose.config import AppConfig
 
 class OBSMessageBox:
     def __init__(self, config: AppConfig) -> None:
@@ -14,6 +15,10 @@ class OBSMessageBox:
             return False
         if self._disabled:
             return False
+
+        if not self._preflight_socket():
+            return False
+
         try:
             from obsws_python import ReqClient
 
@@ -26,8 +31,9 @@ class OBSMessageBox:
             self._client = None
             if self.config.obs_required:
                 raise
-            self._disabled = True
-            print(f"[WARN] OBS message_box disabled: {exc}")
+
+            self._disable(f"OBS message_box disabled: {exc}")
+
             return False
         return True
 
@@ -50,6 +56,24 @@ class OBSMessageBox:
         except Exception as exc:
             if self.config.obs_required:
                 raise
-            self._disabled = True
+
             self._client = None
-            print(f"[WARN] OBS message_box disabled after update failure: {exc}")
+            self._disable(f"OBS message_box disabled after update failure: {exc}")
+
+    def _preflight_socket(self) -> bool:
+        try:
+            with socket.create_connection(
+                (self.config.obs_host, self.config.obs_port),
+                timeout=self.config.obs_connect_timeout,
+            ):
+                return True
+        except OSError as exc:
+            if self.config.obs_required:
+                raise
+            self._disable(f"OBS websocket unavailable at {self.config.obs_host}:{self.config.obs_port}: {exc}")
+            return False
+
+    def _disable(self, message: str) -> None:
+        self._disabled = True
+        print(f"[WARN] {message}")
+

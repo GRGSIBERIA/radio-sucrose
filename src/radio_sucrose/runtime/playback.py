@@ -38,6 +38,8 @@ class SegmentPlayer:
                 audio_path = future.result()
                 if index + 1 < len(chunks):
                     future = executor.submit(self.tts.synthesize, chunks[index + 1])
+                if self.audio.config.log_spoken_text:
+                    print(f"[SCRIPT] {chunk.speaker_name}: {chunk.display_text}")
                 self.obs.set_text(chunk.display_text)
                 self.audio.play(audio_path)
                 speaker_changed = previous_speaker is not None and previous_speaker != chunk.speaker

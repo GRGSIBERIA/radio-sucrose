@@ -70,7 +70,11 @@ def parse_script_json(content: str) -> dict | None:
 def fallback_segment_payload(payload: dict, content: str) -> dict:
     preview = content.strip().replace("\n", " ")[:120] or "vLLMから空の応答が返りました"
     if payload.get("task_type") == "news_segment":
-        title = payload.get("news", {}).get("title", "ニュース")
+
+        news = payload.get("news", {})
+        title = news.get("title", "ニュース")
+        body_preview = _news_body_preview(news)
+
         return {
             "segment_type": "news",
             "summary_for_memory": f"fallback: {title}",
@@ -78,14 +82,20 @@ def fallback_segment_payload(payload: dict, content: str) -> dict:
                 {
                     "speaker": "A",
                     "speaker_name": "スクロース",
-                    "tts_text": f"📖{title}についてお伝えする予定でしたが、台本生成が少し不安定でした。",
-                    "display_text": f"{title}についてお伝えする予定でしたが、台本生成が少し不安定でした。",
+                    "tts_text": f"📖{title}についてお伝えします。台本生成が不安定だったため、分かっている内容を短く整理します。",
+                    "display_text": f"{title}についてお伝えします。台本生成が不安定だったため、分かっている内容を短く整理します。",
+                },
+                {
+                    "speaker": "A",
+                    "speaker_name": "スクロース",
+                    "tts_text": f"📖記事によると、{body_preview}",
+                    "display_text": f"記事によると、{body_preview}",
                 },
                 {
                     "speaker": "B",
                     "speaker_name": "ドリー",
-                    "tts_text": "😟いったん短く区切って、次の話題に進みましょう。",
-                    "display_text": "いったん短く区切って、次の話題に進みましょう。",
+                    "tts_text": "🤔詳細はまだ整理が必要ですが、まずはこの内容を前提に受け止めたいですね。",
+                    "display_text": "詳細はまだ整理が必要ですが、まずはこの内容を前提に受け止めたいですね。",
                 },
             ],
         }
@@ -101,6 +111,12 @@ def fallback_segment_payload(payload: dict, content: str) -> dict:
             }
         ],
     }
+
+
+def _news_body_preview(news: dict) -> str:
+    body = str(news.get("body") or news.get("body_excerpt") or "本文情報は取得できていません。")
+    body = " ".join(part.strip() for part in body.splitlines() if part.strip())
+    return body[:180] + ("。" if not body[:180].endswith("。") else "")
 
 
 def _extract_fenced_json(content: str) -> str | None:
