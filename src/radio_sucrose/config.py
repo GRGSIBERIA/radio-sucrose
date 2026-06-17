@@ -15,6 +15,7 @@ class AppConfig:
     obs_port: int = 4455
     obs_password: str = ""
     obs_message_source: str = "message_box"
+    obs_required: bool = False
     loop_sleep_seconds: float = 5.0
     rss_poll_seconds: float = 60.0
     dry_run: bool = False
@@ -41,6 +42,7 @@ class AppConfig:
             obs_port=int(os.getenv("OBS_PORT", str(cls.obs_port))),
             obs_password=os.getenv("OBS_PASSWORD", cls.obs_password),
             obs_message_source=os.getenv("OBS_MESSAGE_SOURCE", cls.obs_message_source),
+            obs_required=os.getenv("OBS_REQUIRED", "0") in {"1", "true", "TRUE", "yes"},
             loop_sleep_seconds=float(os.getenv("RADIO_LOOP_SLEEP_SECONDS", str(cls.loop_sleep_seconds))),
             rss_poll_seconds=float(os.getenv("RADIO_RSS_POLL_SECONDS", str(cls.rss_poll_seconds))),
             dry_run=os.getenv("RADIO_DRY_RUN", "0") in {"1", "true", "TRUE", "yes"},

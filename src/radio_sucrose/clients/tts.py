@@ -9,7 +9,6 @@ from radio_sucrose.models import SPEAKERS, TTSChunk
 
 
 class IrodoriTTSClient:
-
     """Irodori-TTS-Server client with a dry-run silent WAV fallback."""
 
     def __init__(self, config: AppConfig, output_dir: str = "tmp/tts", session=None) -> None:
@@ -92,8 +91,6 @@ class IrodoriTTSClient:
         if not self.config.irodori_api_key or self.config.irodori_api_key == "not-used":
             return {}
         return {"Authorization": f"Bearer {self.config.irodori_api_key}"}
-
-
 
 def _write_silent_wav(path: Path, duration_seconds: float = 0.15, sample_rate: int = 16000) -> None:
     frames = int(duration_seconds * sample_rate)

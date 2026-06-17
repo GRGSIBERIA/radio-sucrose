@@ -59,7 +59,6 @@ def test_extract_article_body_removes_yahoo_javascript_warning() -> None:
     assert body == "本文の第一段落です。"
 
 
-
 def test_extract_article_body_joins_split_paragraph_containers() -> None:
     soup = BeautifulSoup(
         """
