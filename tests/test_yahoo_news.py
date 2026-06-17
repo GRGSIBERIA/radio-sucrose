@@ -40,7 +40,6 @@ def test_extract_title_and_body_from_yahoo_article() -> None:
     assert "これは第三段落です" in body
     assert "\n" in body
 
-
 def test_extract_article_body_removes_yahoo_javascript_warning() -> None:
     soup = BeautifulSoup(
         """

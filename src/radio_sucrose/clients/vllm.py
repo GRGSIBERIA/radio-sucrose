@@ -10,6 +10,7 @@ from radio_sucrose.prompt import PromptBuilder
 from radio_sucrose.validation import normalize_segment
 
 
+
 class VLLMScriptClient:
     def __init__(self, config: AppConfig, prompt_builder: PromptBuilder) -> None:
         self.config = config
@@ -140,3 +141,4 @@ def _extract_first_balanced_json_object(content: str) -> str | None:
             if depth == 0:
                 return content[start : index + 1]
     return None
+
