@@ -39,3 +39,20 @@ def test_extract_title_and_body_from_yahoo_article() -> None:
     assert "これは第二段落です" in body
     assert "これは第三段落です" in body
     assert "\n" in body
+
+def test_extract_article_body_removes_yahoo_javascript_warning() -> None:
+    soup = BeautifulSoup(
+        """
+        <div id="uamods"><div><div>
+          <p>現在JavaScriptが無効になっています</p>
+          <p>Yahoo!ニュースのすべての機能を利用するためには、JavaScriptの設定を有効にしてください。 JavaScriptの設定を変更する方法はこちら</p>
+          <p>本文の第一段落です。</p>
+        </div></div></div>
+        """,
+        "html.parser",
+    )
+
+    body = extract_article_body(soup, min_chars=1)
+
+    assert "JavaScript" not in body
+    assert body == "本文の第一段落です。"

@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import requests
 
 from radio_sucrose.models import NewsArticle, RSSItem
+from radio_sucrose.text import clean_article_text
 
 YAHOO_RSS_FEEDS: dict[str, dict[str, str]] = {
     "top": {"label": "主要", "url": "https://news.yahoo.co.jp/rss/topics/top-picks.xml"},
@@ -35,6 +36,9 @@ DROP_TEXT_PATTERNS = (
     "Facebook",
     "LINE",
     "Xで",
+    "現在JavaScriptが無効になっています",
+    "Yahoo!ニュースのすべての機能を利用するためには",
+    "JavaScriptの設定を変更する方法はこちら",
 )
 
 
@@ -101,10 +105,10 @@ def extract_article_body(soup: BeautifulSoup, min_chars: int = 100) -> str:
             continue
         paragraphs = []
         for paragraph in container.find_all("p", recursive=True):
-            text = paragraph.get_text(" ", strip=True)
+            text = clean_article_text(paragraph.get_text(" ", strip=True))
             if text and not _is_noise(text):
                 paragraphs.append(text)
-        body = "\n".join(paragraphs)
+        body = clean_article_text("\n".join(paragraphs))
         if len(body) >= min_chars:
             return body
     return ""

@@ -62,3 +62,11 @@ def test_package_cli_help_imports_without_runtime_dependencies(capsys) -> None:
 
     assert exc_info.value.code == 0
     assert "Run radio-sucrose live loop" in capsys.readouterr().out
+
+def test_clean_article_text_removes_yahoo_javascript_warning() -> None:
+    from radio_sucrose.text import clean_article_text, truncate_by_paragraphs
+
+    noisy = "現在JavaScriptが無効になっています\nYahoo!ニュースのすべての機能を利用するためには、JavaScriptの設定を有効にしてください。 JavaScriptの設定を変更する方法はこちら\n本文です。"
+
+    assert clean_article_text(noisy) == "本文です。"
+    assert truncate_by_paragraphs(noisy) == "本文です。"
