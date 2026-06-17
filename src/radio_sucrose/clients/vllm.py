@@ -10,7 +10,6 @@ from radio_sucrose.prompt import PromptBuilder
 from radio_sucrose.validation import normalize_segment
 
 
-
 class VLLMScriptClient:
     def __init__(self, config: AppConfig, prompt_builder: PromptBuilder) -> None:
         self.config = config

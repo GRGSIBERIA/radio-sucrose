@@ -22,6 +22,14 @@ class AppConfig:
     dry_run_superchat_author: str = "テストリスナー"
     dry_run_superchat_amount: str = "￥500"
 
+    irodori_base_url: str = "http://localhost:8088/v1"
+    irodori_api_key: str = "not-used"
+    irodori_model: str = "irodori-tts"
+    irodori_response_format: str = "wav"
+    irodori_speed: float = 1.0
+    irodori_upload_voices: bool = True
+    irodori_use_ref_wav: bool = False
+
     @classmethod
     def from_env(cls) -> "AppConfig":
         return cls(
@@ -40,4 +48,11 @@ class AppConfig:
             dry_run_superchat_message=os.getenv("RADIO_DRY_RUN_SUPERCHAT_MESSAGE", ""),
             dry_run_superchat_author=os.getenv("RADIO_DRY_RUN_SUPERCHAT_AUTHOR", cls.dry_run_superchat_author),
             dry_run_superchat_amount=os.getenv("RADIO_DRY_RUN_SUPERCHAT_AMOUNT", cls.dry_run_superchat_amount),
+            irodori_base_url=os.getenv("IRODORI_BASE_URL", cls.irodori_base_url),
+            irodori_api_key=os.getenv("IRODORI_API_KEY", cls.irodori_api_key),
+            irodori_model=os.getenv("IRODORI_MODEL", cls.irodori_model),
+            irodori_response_format=os.getenv("IRODORI_RESPONSE_FORMAT", cls.irodori_response_format),
+            irodori_speed=float(os.getenv("IRODORI_SPEED", str(cls.irodori_speed))),
+            irodori_upload_voices=os.getenv("IRODORI_UPLOAD_VOICES", "1") in {"1", "true", "TRUE", "yes"},
+            irodori_use_ref_wav=os.getenv("IRODORI_USE_REF_WAV", "0") in {"1", "true", "TRUE", "yes"},
         )

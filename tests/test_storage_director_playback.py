@@ -77,3 +77,15 @@ def test_dry_run_script_client_generates_superchat_reading() -> None:
     assert any("ラジオネーム相談者さん" in chunk.display_text for chunk in segment.chunks)
     assert any("スーパーチャット" in chunk.display_text for chunk in segment.chunks)
     assert any("転職すべきか悩んでいます" in chunk.display_text for chunk in segment.chunks)
+
+def test_director_sends_full_cleaned_article_body_to_vllm() -> None:
+    repo = SQLiteRepository(":memory:")
+    body = "本文1。\n" + "長い本文。" * 500
+    repo.insert_article(NewsArticle(url="https://example.com/full", title="Full", category="国内", body=body))
+    director = ProgramDirector(repo)
+
+    payload = director.choose_payload()
+
+    assert payload["news"]["body"] == body
+    assert payload["news"]["body_excerpt"] == body
+    assert len(payload["news"]["body_excerpt"]) > 1800

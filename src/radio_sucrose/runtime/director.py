@@ -3,7 +3,9 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from radio_sucrose.models import NewsArticle, SuperChatMessage
-from radio_sucrose.text import truncate_by_paragraphs
+
+from radio_sucrose.text import clean_article_text
+
 from radio_sucrose.storage.sqlite import SQLiteRepository
 
 
@@ -53,7 +55,8 @@ class ProgramDirector:
                 "source": article.source,
                 "published_at": article.published_at,
                 "url": article.full_article_url or article.url,
-                "body_excerpt": truncate_by_paragraphs(article.body, max_chars=1800),
+                "body": clean_article_text(article.body),
+                "body_excerpt": clean_article_text(article.body),
             },
             "constraints": {
                 "target_duration_sec": 180,
