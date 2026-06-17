@@ -4,6 +4,8 @@ import argparse
 
 from radio_sucrose.config import AppConfig
 
+from radio_sucrose.runtime.loop import build_radio_loop
+
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Run radio-sucrose live loop.")
@@ -14,8 +16,6 @@ def main(argv: list[str] | None = None) -> None:
     config = AppConfig.from_env()
     if args.dry_run:
         config = AppConfig(**{**config.__dict__, "dry_run": True})
-
-    from radio_sucrose.runtime.loop import build_radio_loop
 
     loop = build_radio_loop(config)
     if args.once:
