@@ -16,8 +16,10 @@ class OBSMessageBox:
             return False
         if self._disabled:
             return False
+
         if not self._preflight_socket():
             return False
+
         try:
             from obsws_python import ReqClient
 
@@ -30,7 +32,9 @@ class OBSMessageBox:
             self._client = None
             if self.config.obs_required:
                 raise
+
             self._disable(f"OBS message_box disabled: {exc}")
+
             return False
         return True
 
@@ -38,6 +42,7 @@ class OBSMessageBox:
         if self.config.dry_run:
             print(f"[OBS:{self.config.obs_message_source}] {text}")
             return
+
         if self._disabled:
             return
         if self._client is None and not self.connect():
@@ -52,6 +57,7 @@ class OBSMessageBox:
         except Exception as exc:
             if self.config.obs_required:
                 raise
+
             self._client = None
             self._disable(f"OBS message_box disabled after update failure: {exc}")
 
@@ -71,3 +77,4 @@ class OBSMessageBox:
     def _disable(self, message: str) -> None:
         self._disabled = True
         print(f"[WARN] {message}")
+

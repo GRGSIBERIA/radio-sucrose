@@ -70,9 +70,11 @@ def parse_script_json(content: str) -> dict | None:
 def fallback_segment_payload(payload: dict, content: str) -> dict:
     preview = content.strip().replace("\n", " ")[:120] or "vLLMから空の応答が返りました"
     if payload.get("task_type") == "news_segment":
+
         news = payload.get("news", {})
         title = news.get("title", "ニュース")
         body_preview = _news_body_preview(news)
+
         return {
             "segment_type": "news",
             "summary_for_memory": f"fallback: {title}",
@@ -80,14 +82,20 @@ def fallback_segment_payload(payload: dict, content: str) -> dict:
                 {
                     "speaker": "A",
                     "speaker_name": "スクロース",
-                    "tts_text": f"📖{title}についてお伝えします。台本生成が不安定だったため、分かっている内容を短く整理します。",
-                    "display_text": f"{title}についてお伝えします。台本生成が不安定だったため、分かっている内容を短く整理します。",
+                    "tts_text": f"📖{title}についてお伝えします。",
+                    "display_text": f"{title}についてお伝えします。",
                 },
                 {
                     "speaker": "A",
                     "speaker_name": "スクロース",
                     "tts_text": f"📖記事によると、{body_preview}",
                     "display_text": f"記事によると、{body_preview}",
+                },
+                {
+                    "speaker": "B",
+                    "speaker_name": "ドリー",
+                    "tts_text": "🤔詳細はまだ整理が必要ですが、まずはこの内容を前提に受け止めたいですね。",
+                    "display_text": "詳細はまだ整理が必要ですが、まずはこの内容を前提に受け止めたいですね。",
                 },
             ],
         }

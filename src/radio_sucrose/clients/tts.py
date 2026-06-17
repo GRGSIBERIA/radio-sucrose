@@ -15,7 +15,9 @@ class IrodoriTTSClient:
         self.config = config
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
+
         if session is None and not config.dry_run:
+
             import requests
 
             session = requests.Session()
@@ -91,7 +93,6 @@ class IrodoriTTSClient:
         if not self.config.irodori_api_key or self.config.irodori_api_key == "not-used":
             return {}
         return {"Authorization": f"Bearer {self.config.irodori_api_key}"}
-
 
 def _write_silent_wav(path: Path, duration_seconds: float = 0.15, sample_rate: int = 16000) -> None:
     frames = int(duration_seconds * sample_rate)

@@ -113,3 +113,4 @@ def test_segment_player_logs_spoken_display_text(capsys, tmp_path) -> None:
     player.play_segment(segment)
 
     assert "[SCRIPT] スクロース: こんにちは。" in capsys.readouterr().out
+

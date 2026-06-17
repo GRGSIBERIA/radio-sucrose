@@ -20,6 +20,7 @@ def clean_article_text(text: str) -> str:
     return "\n".join(cleaned_lines)
 
 
+
 def truncate_by_paragraphs(body: str, max_chars: int | None = None) -> str:
     # Historical compatibility shim: this function no longer truncates because
     # the radio prompt should receive the full cleaned article body.
