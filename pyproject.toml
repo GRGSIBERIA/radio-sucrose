@@ -1,0 +1,26 @@
+[project]
+name = "radio-sucrose"
+version = "0.1.0"
+description = "AI radio loop for news, Super Chats, Irodori-TTS, and OBS."
+requires-python = ">=3.11"
+dependencies = [
+  "beautifulsoup4>=4.12",
+  "lxml>=5.0",
+  "openai>=1.0",
+  "requests>=2.31",
+]
+
+[project.optional-dependencies]
+obs = ["obsws-python>=1.7"]
+test = ["pytest>=8.0"]
+
+[project.scripts]
+radio-sucrose = "radio_sucrose.app:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
