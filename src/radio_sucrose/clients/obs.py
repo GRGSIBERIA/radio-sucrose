@@ -4,6 +4,7 @@ import socket
 
 from radio_sucrose.config import AppConfig
 
+
 class OBSMessageBox:
     def __init__(self, config: AppConfig) -> None:
         self.config = config

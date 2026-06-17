@@ -20,17 +20,8 @@ def clean_article_text(text: str) -> str:
     return "\n".join(cleaned_lines)
 
 
-def truncate_by_paragraphs(body: str, max_chars: int = 1800) -> str:
-    body = clean_article_text(body)
-    paragraphs: list[str] = []
-    total = 0
-    for paragraph in body.splitlines():
-        paragraph = paragraph.strip()
-        if not paragraph:
-            continue
-        next_total = total + len(paragraph) + (1 if paragraphs else 0)
-        if next_total > max_chars:
-            break
-        paragraphs.append(paragraph)
-        total = next_total
-    return "\n".join(paragraphs)
+
+def truncate_by_paragraphs(body: str, max_chars: int | None = None) -> str:
+    # Historical compatibility shim: this function no longer truncates because
+    # the radio prompt should receive the full cleaned article body.
+    return clean_article_text(body)

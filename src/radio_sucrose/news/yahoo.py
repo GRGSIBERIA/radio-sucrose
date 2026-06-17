@@ -116,11 +116,11 @@ def extract_article_body(soup: BeautifulSoup, min_chars: int = 100) -> str:
     if not bodies:
         return ""
 
-    full_body = clean_article_text("\n".join(bodies))
-    if len(full_body) >= min_chars:
-        return full_body
+    longest_body = max(bodies, key=len)
+    if len(longest_body) >= min_chars:
+        return longest_body
 
-    return max(bodies, key=len)
+    return longest_body
 
 
 def _extract_paragraphs(container: BeautifulSoup) -> list[str]:

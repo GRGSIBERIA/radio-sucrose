@@ -82,8 +82,8 @@ def fallback_segment_payload(payload: dict, content: str) -> dict:
                 {
                     "speaker": "A",
                     "speaker_name": "スクロース",
-                    "tts_text": f"📖{title}についてお伝えします。台本生成が不安定だったため、分かっている内容を短く整理します。",
-                    "display_text": f"{title}についてお伝えします。台本生成が不安定だったため、分かっている内容を短く整理します。",
+                    "tts_text": f"📖{title}についてお伝えします。",
+                    "display_text": f"{title}についてお伝えします。",
                 },
                 {
                     "speaker": "A",
