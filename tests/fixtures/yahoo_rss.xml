@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Yahoo!ニュース・トピックス</title>
+    <item>
+      <title>テストニュース1</title>
+      <link>https://news.yahoo.co.jp/pickup/1</link>
+      <pubDate>Tue, 16 Jun 2026 12:00:00 +0900</pubDate>
+    </item>
+    <item>
+      <title>テストニュース2</title>
+      <link>https://news.yahoo.co.jp/pickup/2</link>
+    </item>
+  </channel>
+</rss>
